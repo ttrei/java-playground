@@ -14,3 +14,16 @@ Initial structure was created with "gradle init".
    - Spring Boot: 3.5.5
    - Java: 21
    - Dependencies: Spring Web
+
+   Took the relevant gradle settings and app structure from the generated project.
+
+   It also had some links to documentation:
+
+   Reference:
+   - [Spring Boot Gradle Plugin Reference Guide](https://docs.spring.io/spring-boot/3.5.5/gradle-plugin)
+   - [Spring Web](https://docs.spring.io/spring-boot/3.5.5/reference/web/servlet.html)
+
+   Guides:
+   - [Building a RESTful Web Service](https://spring.io/guides/gs/rest-service/)
+   - [Serving Web Content with Spring MVC](https://spring.io/guides/gs/serving-web-content/)
+   - [Building REST services with Spring](https://spring.io/guides/tutorials/rest/)
