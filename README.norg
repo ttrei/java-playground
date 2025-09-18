@@ -1,0 +1,16 @@
+* Java Playground
+
+Experiments with Java and popular Java libraries.
+
+Initial structure was created with "gradle init".
+
+** app-spring-boot
+
+   Started here: https://spring.io/guides/gs/spring-boot
+   It linked to https://start.spring.io/
+   Settings:
+   - Project: "Gradle - Groovy"
+   - Language: Java
+   - Spring Boot: 3.5.5
+   - Java: 21
+   - Dependencies: Spring Web
