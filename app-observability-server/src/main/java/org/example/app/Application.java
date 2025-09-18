@@ -17,17 +17,18 @@ public class Application {
 
     @Bean
     public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
-        return args -> {
+        return args -> {};
+//        return args -> printBeans(ctx);
+    }
 
-            System.out.println("Let's inspect the beans provided by Spring Boot:");
+    private void printBeans(ApplicationContext ctx) {
 
-            String[] beanNames = ctx.getBeanDefinitionNames();
-            Arrays.sort(beanNames);
-            for (String beanName : beanNames) {
-                System.out.println(beanName);
-            }
-
-        };
+        System.out.println("Let's inspect the beans provided by Spring Boot:");
+        String[] beanNames = ctx.getBeanDefinitionNames();
+        Arrays.sort(beanNames);
+        for (String beanName : beanNames) {
+            System.out.println(beanName);
+        }
     }
 
 }
