@@ -11,4 +11,4 @@ plugins {
 }
 
 rootProject.name = 'java-playground'
-include('app', 'list', 'utilities')
+include('app', 'app-spring-boot', 'list', 'utilities')
