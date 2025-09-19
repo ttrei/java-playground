@@ -19,9 +19,15 @@ class MyController {
     }
 
     @GetMapping("/user/{userId}")
-    String userName(@PathVariable("userId") String userId) {
+    String getUser(@PathVariable("userId") String userId) {
         log.info("GET /user/{}", userId);
-        return myUserService.userName(userId);
+        return myUserService.getUser(userId);
+    }
+
+    @GetMapping("/user/{userId}/full")
+    String getFullUser(@PathVariable("userId") String userId) {
+        log.info("GET /user/{}/full", userId);
+        return myUserService.getFullUser(userId);
     }
 
     @PostMapping("/user/{userId}/ping")
