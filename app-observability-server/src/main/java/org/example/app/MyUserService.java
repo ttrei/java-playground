@@ -23,30 +23,39 @@ class MyUserService {
         this.observationRegistry.observationConfig().observationHandler(new LoggingObservationHandler());
     }
 
-    /*
-    // Example of using an annotation to observe methods
-    // <user.name> will be used as a metric name
-    // <getting-user-name> will be used as a span  name
-    // <userType=userType2> will be set as a tag for both metric & span
-    @Observed(name = "user.name",
-            contextualName = "getting-user-name",
-            lowCardinalityKeyValues = {"userType", "userType2"})
-     */
+    // Create observation manually
     String userName(String userId) {
         var observation = Observation.createNotStarted("my-observation", this.observationRegistry);
-        observation.contextualName("get-user-name");
+        observation.contextualName("getting-user");
         observation.highCardinalityKeyValue("userId", userId);
         return observation.observe(() -> {
-            log.info("Getting user name for user with id <{}>", userId);
-            observation.lowCardinalityKeyValue("userType", "userType2");
+            log.info("Getting user id <{}>", userId);
+            observation.lowCardinalityKeyValue("callType", "name");
             observation.highCardinalityKeyValue("userAge", userId);
             try {
-                Thread.sleep(random.nextLong(200L)); // simulates latency
+                Thread.sleep(random.nextLong(200L));
             }
             catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
             return "foo";
         });
+    }
+
+    // Example of using an annotation to observe methods
+    // <user.name> will be used as a metric name
+    // <getting-user-name> will be used as a span name
+    // <userType=userType2> will be set as a tag for both metric & span
+    @Observed(name = "ping.user",
+            contextualName = "pinging-user",
+            lowCardinalityKeyValues = {"callType", "ping"})
+    void pingUser(String userId) {
+        log.info("Pinging user id <{}>", userId);
+        try {
+            Thread.sleep(random.nextLong(200L));
+        }
+        catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
