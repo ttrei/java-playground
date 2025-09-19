@@ -1,5 +1,7 @@
 package org.example.app;
 
+import io.micrometer.observation.Observation;
+import io.micrometer.observation.ObservationRegistry;
 import io.micrometer.observation.annotation.Observed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,8 +14,15 @@ class MyUserService {
 
     private static final Logger log = LoggerFactory.getLogger(MyUserService.class);
 
+    private final Observation observation;
+
     private final Random random = new Random();
 
+    public MyUserService(ObservationRegistry observationRegistry) {
+        this.observation = Observation.createNotStarted("my-observation", observationRegistry);
+    }
+
+    /*
     // Example of using an annotation to observe methods
     // <user.name> will be used as a metric name
     // <getting-user-name> will be used as a span  name
@@ -21,14 +30,17 @@ class MyUserService {
     @Observed(name = "user.name",
             contextualName = "getting-user-name",
             lowCardinalityKeyValues = {"userType", "userType2"})
+     */
     String userName(String userId) {
-        log.info("Getting user name for user with id <{}>", userId);
-        try {
-            Thread.sleep(random.nextLong(200L)); // simulates latency
-        }
-        catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        return "foo";
+        return observation.observe(() -> {
+            log.info("Getting user name for user with id <{}>", userId);
+            try {
+                Thread.sleep(random.nextLong(200L)); // simulates latency
+            }
+            catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            return "foo";
+        });
     }
 }
