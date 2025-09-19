@@ -14,12 +14,13 @@ class MyUserService {
 
     private static final Logger log = LoggerFactory.getLogger(MyUserService.class);
 
-    private final Observation observation;
+    private final ObservationRegistry observationRegistry;
 
     private final Random random = new Random();
 
     public MyUserService(ObservationRegistry observationRegistry) {
-        this.observation = Observation.createNotStarted("my-observation", observationRegistry);
+        this.observationRegistry = observationRegistry;
+        this.observationRegistry.observationConfig().observationHandler(new LoggingObservationHandler());
     }
 
     /*
@@ -32,8 +33,13 @@ class MyUserService {
             lowCardinalityKeyValues = {"userType", "userType2"})
      */
     String userName(String userId) {
+        var observation = Observation.createNotStarted("my-observation", this.observationRegistry);
+        observation.contextualName("get-user-name");
+        observation.highCardinalityKeyValue("userId", userId);
         return observation.observe(() -> {
             log.info("Getting user name for user with id <{}>", userId);
+            observation.lowCardinalityKeyValue("userType", "userType2");
+            observation.highCardinalityKeyValue("userAge", userId);
             try {
                 Thread.sleep(random.nextLong(200L)); // simulates latency
             }
