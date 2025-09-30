@@ -45,7 +45,7 @@ class MyUserService {
         });
     }
 
-    // Create observation manually
+    // Create observation manually with same name
     String getFullUser(String userId) {
         var observation = Observation.createNotStarted(OBSERVATION_NAME1, this.observationRegistry);
         observation.contextualName("getting-full-user");
@@ -68,10 +68,10 @@ class MyUserService {
     // <getting-user-name> will be used as a span name
     // <userType=userType2> will be set as a tag for both metric & span
     //
-    // NOTE(reinis): Don't use the same name as when creating the observation manually because this creates the
-    // Observation via io.micrometer.observation.aop.ObservedAspectObservationDocumentation.of()
-    // which adds low cardinality keys "class" and "name", and prometheus registry doesn't like multiple meters with
-    // same name but different tags.
+    // NOTE(reinis): Don't use the same name as for manually created observations above because this one creates the
+    // Observation object via io.micrometer.observation.aop.ObservedAspectObservationDocumentation.of()
+    // which adds low cardinality keys "class" and "name", and io.micrometer.prometheusmetrics.PrometheusMeterRegistry
+    // doesn't like multiple meters with same name but different tags.
     @Observed(name = OBSERVATION_NAME2,
             contextualName = "pinging-user",
             lowCardinalityKeyValues = {"callType", "pingUser"})
