@@ -1,5 +1,7 @@
 package org.example.app;
 
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Timer;
 import io.micrometer.observation.Observation;
 import io.micrometer.observation.ObservationRegistry;
 import io.micrometer.observation.annotation.Observed;
@@ -7,6 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Random;
 
 @Service
@@ -14,6 +18,7 @@ class MyUserService {
 
     private static final String OBSERVATION_NAME1 = "my.observation.1";
     private static final String OBSERVATION_NAME2 = "my.observation.2";
+    private static final String MANUAL_TIMER_METRIC_NAME = "manual.timer";
 
     private static final Logger log = LoggerFactory.getLogger(MyUserService.class);
 
@@ -21,9 +26,14 @@ class MyUserService {
 
     private final Random random = new Random();
 
-    public MyUserService(ObservationRegistry observationRegistry) {
+    private final Timer manualTimer1;
+    private final Timer manualTimer2;
+
+    public MyUserService(ObservationRegistry observationRegistry, MeterRegistry meterRegistry) {
         this.observationRegistry = observationRegistry;
         this.observationRegistry.observationConfig().observationHandler(new LoggingObservationHandler());
+        this.manualTimer1 = meterRegistry.timer(MANUAL_TIMER_METRIC_NAME, "tag1", "timer1");
+        this.manualTimer2 = meterRegistry.timer(MANUAL_TIMER_METRIC_NAME, "tag1", "timer2");
     }
 
     // Create observation manually
@@ -83,5 +93,18 @@ class MyUserService {
         catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    void frobUser(String userId) {
+        log.info("Frobbing user by id <{}>", userId);
+        var start = Instant.now();
+        try {
+            Thread.sleep(random.nextLong(200L));
+        }
+        catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        manualTimer1.record(Duration.between(start, Instant.now()));
+        manualTimer2.record(Duration.between(start, Instant.now()));
     }
 }

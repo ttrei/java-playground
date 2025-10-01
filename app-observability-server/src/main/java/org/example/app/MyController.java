@@ -29,4 +29,9 @@ class MyController {
     void pingUser(@PathVariable("userId") String userId) {
         myUserService.pingUser(userId);
     }
+
+    @PostMapping("/user/{userId}/frob")
+    void frobUser(@PathVariable("userId") String userId) {
+        myUserService.frobUser(userId);
+    }
 }
