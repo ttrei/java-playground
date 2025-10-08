@@ -29,4 +29,4 @@ if [ "$1" = "s" ]; then
     curl -X POST localhost:7654/user/555/frob > /dev/null
 fi
 
-curl localhost:7654/actuator/prometheus
+curl -s localhost:7654/actuator/prometheus
