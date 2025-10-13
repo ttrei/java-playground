@@ -75,8 +75,8 @@ class MyUserService {
     }
 
     // Use annotation to observe the method
-    // <getting-user-name> will be used as a span name
-    // <userType=userType2> will be set as a tag for both metric & span
+    // <pinging-user> will be used as a span name
+    // <callType=pingUser> will be set as a tag for both metric & span
     //
     // NOTE(reinis): Don't use the same name as for manually created observations above because this one creates the
     // Observation object via io.micrometer.observation.aop.ObservedAspectObservationDocumentation.of()
