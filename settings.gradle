@@ -11,4 +11,4 @@ plugins {
 }
 
 rootProject.name = 'java-playground'
-include('app', 'app-observability-server', 'list', 'utilities')
+include('app', 'app-observability-server', 'app-web-client', 'list', 'utilities')
