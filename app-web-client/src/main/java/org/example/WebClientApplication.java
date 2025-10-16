@@ -18,8 +18,7 @@ public class WebClientApplication {
             if (args.length != 1) {
                 throw new IllegalArgumentException("Exactly one argument required");
             }
-            int value = Integer.parseInt(args[0]);
-            contentService.run(value);
+            contentService.run(Integer.parseInt(args[0]));
             int exitCode = SpringApplication.exit(ctx, () -> 0);
             System.exit(exitCode);
         };
