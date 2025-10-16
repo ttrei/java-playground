@@ -2,16 +2,16 @@ package org.example;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Flux;
 
 @Slf4j
 @Service
 public class ContentService {
 
-    public void run() {
+    public void run(int countRequests) {
         log.info("ContentService run");
 
         WebClient client = WebClient.builder()
@@ -19,11 +19,12 @@ public class ContentService {
                 .filter(logRequest())
                 .build();
 
-        ResponseEntity<String> result =
-                client.get().accept(MediaType.TEXT_HTML).retrieve().toEntity(String.class).block();
+        Flux<String> responses = Flux.range(1, countRequests)
+                .flatMap(i -> client.get().uri("/").accept(MediaType.TEXT_HTML)
+                        .retrieve()
+                        .bodyToMono(String.class));
 
-        log.info("Result:\n{}", result);
-
+        responses.collectList().block();
     }
 
     private ExchangeFilterFunction logRequest() {
