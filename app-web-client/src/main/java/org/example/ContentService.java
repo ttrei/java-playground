@@ -1,8 +1,8 @@
 package org.example;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -11,17 +11,19 @@ import org.springframework.web.reactive.function.client.WebClient;
 @Service
 public class ContentService {
 
-    private final WebClient webClient;
-
-    public ContentService() {
-        this.webClient = WebClient.builder().baseUrl("localhost")
-                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .filter(logRequest())
-                .build();
-    }
-
     public void run() {
         log.info("ContentService run");
+
+        WebClient client = WebClient.builder()
+                .baseUrl("http://localhost:8000")
+                .filter(logRequest())
+                .build();
+
+        ResponseEntity<String> result =
+                client.get().accept(MediaType.TEXT_HTML).retrieve().toEntity(String.class).block();
+
+        log.info("Result:\n{}", result);
+
     }
 
     private ExchangeFilterFunction logRequest() {
