@@ -12,12 +12,21 @@ import static org.example.utilities.StringUtils.split;
 
 import org.apache.commons.text.WordUtils;
 
+import java.time.Instant;
+import java.time.OffsetDateTime;
+
 public class App {
     public static void main(String[] args) {
         LinkedList tokens;
         tokens = split(getMessage());
         String result = join(tokens);
         System.out.println(WordUtils.capitalize(result));
+
+        String exampleDate = "2026-06-17T17:19:59+05:30";
+        Instant parse1 = OffsetDateTime.parse(exampleDate).toInstant();
+        System.out.println("OffsetDateTime.parse(): " + parse1);
+        Instant parse2 = Instant.parse(exampleDate);
+        System.out.println("Instant.parse(): " + parse2);
 
         printStackTrace();
     }
