@@ -12,7 +12,12 @@
   in
   {
     devShells.${system}.default = pkgs.mkShell {
-      buildInputs = [ pkgs.gradle ];
+      packages = [
+        pkgs.gradle
+        pkgs.jdk21
+      ];
+
+      JAVA_HOME = pkgs.jdk21;
     };
   };
 }
