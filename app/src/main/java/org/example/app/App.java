@@ -12,6 +12,7 @@ import static org.example.utilities.StringUtils.split;
 
 import org.apache.commons.text.WordUtils;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.OffsetDateTime;
 
@@ -27,6 +28,10 @@ public class App {
         System.out.println("OffsetDateTime.parse(): " + parse1);
         Instant parse2 = Instant.parse(exampleDate);
         System.out.println("Instant.parse(): " + parse2);
+
+        var amount = new BigDecimal("100.00");
+        var amount2 = amount.toPlainString();
+        System.out.println("amount2: " + amount2);
 
         printStackTrace();
     }
